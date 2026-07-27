@@ -1,6 +1,6 @@
 dev_var = {
   dev = {
-    rg_name        = "rg_name"
+    rg_name        = "rg_name12"
     location    = "central india"
     vnet_name   = "myvnet"
     add_space   = ["10.0.0.0/16"]
