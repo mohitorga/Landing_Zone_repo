@@ -1,0 +1,48 @@
+name: terraform_configuration
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select Environment"
+        required: true
+        type: choice
+        options:
+          - dev
+          - QA
+          - UAT
+          - prod
+
+jobs:
+  terraform:
+    name: Terraform Plan and Apply
+    runs-on: self-hosted
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Terraform Init
+        working-directory: Env/${{ inputs.environment }}
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: Env/${{ inputs.environment }}
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: Env/${{ inputs.environment }}
+        run: terraform plan
+
+      - name: Terraform Apply
+        working-directory: Env/${{ inputs.environment }}
+        run: terraform apply -auto-approve
