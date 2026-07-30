@@ -1,0 +1,3 @@
+variable "uat_var" {
+  
+}
